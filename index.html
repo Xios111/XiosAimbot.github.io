@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xios Scripts</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#0f0f0f;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.card{
+    width:700px;
+    max-width:95%;
+    background:#181818;
+    border-radius:20px;
+    padding:40px;
+    text-align:center;
+    box-shadow:0 0 40px rgba(0,255,170,.15);
+}
+
+h1{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+p{
+    color:#bdbdbd;
+    margin-bottom:30px;
+}
+
+.feature{
+    background:#222;
+    padding:15px;
+    margin:10px;
+    border-radius:12px;
+}
+
+.code{
+    margin-top:30px;
+    background:#101010;
+    padding:15px;
+    border-radius:12px;
+    word-break:break-all;
+    color:#00ff99;
+}
+
+button{
+    margin-top:20px;
+    background:#00ff99;
+    color:black;
+    border:none;
+    padding:15px 35px;
+    font-size:18px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+
+<h1>Xios Scripts</h1>
+
+<p>Fast • Lightweight • Auto Updating</p>
+
+<div class="feature">✔ Easy Loadstring</div>
+<div class="feature">✔ Always Up To Date</div>
+<div class="feature">✔ GitHub Hosted</div>
+
+<div class="code" id="script">
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Xios111/XiosAimbot.lua/main/XiosAimbot"))()
+</div>
+
+<button onclick="copyScript()">Copy Loadstring</button>
+
+</div>
+
+<script>
+
+function copyScript(){
+
+navigator.clipboard.writeText(document.getElementById("script").innerText);
+
+alert("Copied!");
+
+}
+
+</script>
+
+</body>
+</html>
