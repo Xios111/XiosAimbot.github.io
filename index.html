@@ -1,109 +1,293 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Xios Aimbot Script</title>
+<title>Xios Panel</title>
 
 <style>
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,Helvetica,sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
 }
 
 body{
-    background:#0f0f0f;
-    color:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
+background:#050505;
+color:#00ff88;
+overflow-x:hidden;
+}
+
+/* LOADING */
+#loading{
+position:fixed;
+inset:0;
+background:#050505;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.bar{
+width:200px;
+height:4px;
+background:rgba(255,255,255,0.1);
+border-radius:10px;
+overflow:hidden;
+margin-top:10px;
+}
+
+.bar span{
+display:block;
+height:100%;
+width:0%;
+background:#00ff88;
+animation: load 2.2s ease forwards;
+}
+
+@keyframes load{
+to{width:100%;}
+}
+
+/* GRID BACKGROUND */
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+linear-gradient(rgba(0,255,136,0.04) 1px, transparent 1px),
+linear-gradient(90deg, rgba(0,255,136,0.04) 1px, transparent 1px);
+background-size:50px 50px;
+animation: move 12s linear infinite;
+z-index:0;
+}
+
+@keyframes move{
+from{transform:translateY(0);}
+to{transform:translateY(-30px);}
+}
+
+/* GLOW */
+.glow{
+position:absolute;
+width:240px;
+height:240px;
+border-radius:50%;
+filter:blur(110px);
+opacity:0.18;
+animation: float 7s infinite ease-in-out;
+z-index:0;
+}
+
+.glow:nth-child(1){background:#00ff88; top:10%; left:10%;}
+.glow:nth-child(2){background:#00aaff; bottom:10%; right:10%;}
+
+@keyframes float{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-20px);}
+}
+
+/* MAIN */
+.container{
+display:none;
+position:relative;
+z-index:2;
+flex-direction:column;
+align-items:center;
+padding:50px 20px;
+gap:20px;
+}
+
+/* INFO GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:12px;
+width:100%;
+max-width:900px;
 }
 
 .card{
-    width:700px;
-    max-width:95%;
-    background:#181818;
-    border-radius:20px;
-    padding:40px;
-    text-align:center;
-    box-shadow:0 0 40px rgba(0,255,170,.15);
+background:rgba(0,255,136,0.05);
+border:1px solid rgba(0,255,136,0.2);
+padding:14px;
+border-radius:12px;
+transition:0.2s;
 }
 
+.card:hover{
+transform:translateY(-4px);
+box-shadow:0 0 12px rgba(0,255,136,0.12);
+}
+
+/* PANEL */
+.panel{
+width:100%;
+max-width:600px;
+background:rgba(255,255,255,0.03);
+border:1px solid rgba(0,255,136,0.25);
+backdrop-filter:blur(12px);
+border-radius:18px;
+padding:22px;
+text-align:center;
+box-shadow:0 0 25px rgba(0,255,136,0.08);
+}
+
+/* TYPEWRITER FIX */
 h1{
-    font-size:45px;
-    margin-bottom:10px;
+display:inline-block;
+white-space:nowrap;
+overflow:hidden;
+border-right:2px solid #00ff88;
+max-width:100%;
+font-size:26px;
+text-shadow:0 0 15px #00ff88;
+margin-bottom:8px;
+animation: typing 2.5s steps(20,end) forwards, blink 0.7s infinite;
 }
 
-p{
-    color:#bdbdbd;
-    margin-bottom:30px;
+@keyframes typing{
+from{width:0}
+to{width:100%}
 }
 
-.feature{
-    background:#222;
-    padding:15px;
-    margin:10px;
-    border-radius:12px;
+@keyframes blink{
+0%,100%{border-color:transparent;}
+50%{border-color:#00ff88;}
 }
 
-.code{
-    margin-top:30px;
-    background:#101010;
-    padding:15px;
-    border-radius:12px;
-    word-break:break-all;
-    color:#00ff99;
+.sub{
+opacity:0.6;
+margin-bottom:12px;
 }
 
+/* CONTENT */
+.contentBox{
+background:black;
+border:1px solid #00ff88;
+padding:12px;
+border-radius:10px;
+min-height:60px;
+white-space:pre-wrap;
+}
+
+/* BUTTON */
 button{
-    margin-top:20px;
-    background:#00ff99;
-    color:black;
-    border:none;
-    padding:15px 35px;
-    font-size:18px;
-    border-radius:12px;
-    cursor:pointer;
-    transition:.2s;
+margin-top:14px;
+padding:12px 18px;
+border:none;
+border-radius:10px;
+background:#00ff88;
+color:black;
+font-weight:bold;
+cursor:pointer;
+transition:0.2s;
 }
 
-button:hover{
-    transform:scale(1.05);
+button:active{
+transform:scale(0.95);
+box-shadow:0 0 12px rgba(0,255,136,0.4);
 }
+
+/* TOAST */
+.toast{
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:#00ff88;
+color:black;
+padding:10px 16px;
+border-radius:10px;
+opacity:0;
+transition:0.3s;
+z-index:10;
+}
+
+.toast.show{
+opacity:1;
+transform:translateX(-50%) translateY(-8px);
+}
+
 </style>
-
 </head>
+
 <body>
 
-<div class="card">
-
-<h1>Xios Scripts</h1>
-
-<p>Fast • Lightweight • Auto Updating</p>
-
-<div class="feature">✔ Easy Loadstring</div>
-<div class="feature">✔ Best Aimbot Script</div>
-<div class="feature">✔ GitHub Hosted</div>
-
-<div class="code" id="script">
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Xios111/XiosAimbot.lua/main/XiosAimbot"))()
+<!-- LOADING -->
+<div id="loading">
+<h2>LOADING XIOS PANEL</h2>
+<div class="bar"><span></span></div>
 </div>
 
-<button onclick="copyScript()">Copy Loadstring</button>
+<!-- MAIN -->
+<div class="container" id="main">
+
+<div class="glow"></div>
+<div class="glow"></div>
+
+<!-- INFO -->
+<div class="grid">
+<div class="card">⚡ Discord Sistemi</div>
+<div class="card">💾 Tek tık kopyalama</div>
+<div class="card">🔥 Neon UI</div>
+<div class="card">🚀 Ultra panel</div>
+</div>
+
+<!-- PANEL -->
+<div class="panel">
+
+<h1>XIOS PANEL</h1>
+<div class="sub">Ultra stable version</div>
+
+<div id="content" class="contentBox">
+DISCORD: https://discord.gg/yourlink
+</div>
+
+<button onclick="copyText(this)">KOPYALA</button>
 
 </div>
+
+</div>
+
+<div id="toast" class="toast">Kopyalandı!</div>
 
 <script>
 
-function copyScript(){
+/* LOADING */
+setTimeout(()=>{
+document.getElementById("loading").style.display="none";
+document.getElementById("main").style.display="flex";
+},2200);
 
-navigator.clipboard.writeText(document.getElementById("script").innerText);
+/* COPY */
+function copyText(btn){
+const text=document.getElementById("content").innerText;
 
-alert("Copied!");
+const temp=document.createElement("textarea");
+temp.value=text;
+document.body.appendChild(temp);
+temp.select();
+document.execCommand("copy");
+temp.remove();
 
+/* button FX */
+btn.innerText="COPIED ✓";
+setTimeout(()=>btn.innerText="KOPYALA",1200);
+
+showToast("Kopyalandı!");
+}
+
+/* TOAST */
+function showToast(msg){
+const t=document.getElementById("toast");
+t.innerText=msg;
+t.classList.add("show");
+
+setTimeout(()=>t.classList.remove("show"),1200);
 }
 
 </script>
